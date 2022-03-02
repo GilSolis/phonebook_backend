@@ -71,9 +71,7 @@ app.get('/api/persons/:id', (request, response) => {
     return response.status(400).json({ 
         error: 'name must be unique'
   })
-}
-
-  
+}  
 
   const person = {
     name: persontoAdd.name,
