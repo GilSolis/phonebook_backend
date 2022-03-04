@@ -17,7 +17,7 @@ const phonebookSchema = new mongoose.Schema({
     number: String,
     })
 
-// const Contact = mongoose.model('Phonebook', phonebookSchema)
+const Contact = mongoose.model('Phonebook', phonebookSchema)
 
-module.exports = mongoose.model('Phonebook', phonebookSchema)
+module.exports = Contact
 

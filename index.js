@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
-const Person = require('./models/person')
+const Contact = require('./models/person')
 
 app.use(cors())
 
@@ -48,7 +48,7 @@ let persons = [
 //   })
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(notes => {
+    Contact.find({}).then(notes => {
       response.json(notes)
     })
   }) 
@@ -76,33 +76,41 @@ app.get('/api/persons/:id', (request, response) => {
   })
 
   app.post('/api/persons', (request, response) => {
-    const persontoAdd = request.body
+  const name = request.body.name;
+  const number = request.body.number;
     
 
-  if (!persontoAdd.name || !persontoAdd.number) {
+  if (!name || !number) {
     return response.status(400).json({ 
       error: 'content missing' 
     })
   }
-  let newName = persontoAdd.name
-  let hasPerson = persons.map(person => person.name).includes(newName)
-  if(hasPerson){
-    return response.status(400).json({ 
-        error: 'name must be unique'
-  })
-}  
+  const newPerson = new Contact({ name, number });
+  newPerson
+    .save()
+    .then((result) => response.json(result))
+    .catch((error) => next(error));
 
-  const person = {
-    name: persontoAdd.name,
-    number: persontoAdd.number,
-    id: generateId(),
-  }
+  // let newName = persontoAdd.name
+  // let hasPerson = persons.map(person => person.name).includes(newName)
+  // if(hasPerson){
+  //   return response.status(400).json({ 
+  //       error: 'name must be unique'
+  // })
+ 
+} )
 
-  persons = persons.concat(person)
+// const person = {
+//     name: persontoAdd.name,
+//     number: persontoAdd.number,
+//     id: generateId(),
+//   }
 
-  response.json(person)
-  console.log(persontoAdd)
-  })
+//   persons = persons.concat(person)
+
+//   response.json(person)
+//   console.log(persontoAdd)
+//   })
 
   const generateId = () => {
       return Math.random()*1000
